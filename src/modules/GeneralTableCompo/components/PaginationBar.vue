@@ -30,6 +30,8 @@ export default {
 
 <style scoped>
 .PaginationBar {
+	padding-top: 10px;
+	padding-bottom: 10px;
 	min-height: 48px;
 	display: flex;
 	align-items: center;

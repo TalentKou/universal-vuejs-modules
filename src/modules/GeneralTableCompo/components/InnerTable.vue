@@ -1,23 +1,42 @@
 <template>
 	<div class="InnerTable">
+		<el-popover class="column-control" placement="left-start" trigger="click">
+			<el-checkbox :value="isAllchecked" @change="checkAllChanged">{{
+				isAllchecked ? '全选' : '全不选'
+			}}</el-checkbox>
+			<el-checkbox-group
+				class="column-choose-checkbox-group"
+				v-model="checkList"
+			>
+				<el-checkbox
+					v-for="prop in tableData.props"
+					:key="prop.field"
+					:label="prop.label"
+				></el-checkbox>
+			</el-checkbox-group>
+			<i class="el-icon-s-tools" slot="reference"></i>
+		</el-popover>
 		<div class="table">
 			<div class="row head">
 				<div
 					class="column head"
-					v-for="prop in tableData.props"
+					v-for="prop in computedTableProps"
 					:key="prop.field"
 				>
 					{{ prop.label }}
 				</div>
 			</div>
 			<div class="row" v-for="row in tableData.data" :key="row.id">
-				<div class="column" v-for="prop in tableData.props" :key="prop.field">
+				<div
+					class="column"
+					v-for="prop in computedTableProps"
+					:key="prop.field"
+				>
 					<el-switch
 						v-if="prop.type == 'switch'"
 						v-model="row[prop.field]"
-						active-color="#13ce66"
-						inactive-color="#ff4949"
-						disabled
+						active-text="有效"
+						inactive-text="禁用"
 					>
 					</el-switch>
 					<div v-else-if="prop.type == 'operates'">
@@ -40,11 +59,46 @@
 export default {
 	name: 'InnerTable',
 	props: ['tableData'],
+	data() {
+		return {
+			isAllchecked: false,
+			checkList: [],
+		};
+	},
+	computed: {
+		computedTableProps() {
+			let checkList = this.checkList;
+			let cProps = this.tableData.props.filter((item) => {
+				return checkList.includes(item.label);
+			});
+			return cProps;
+		},
+	},
+	mounted() {
+		this.checkAllChanged(true);
+	},
+	methods: {
+		checkAllChanged(status) {
+			this.isAllchecked = status;
+			if (status) {
+				this.checkList = this.tableData.props.map((item) => item.label);
+			} else {
+				this.checkList.splice(0);
+			}
+		},
+	},
 };
 </script>
 
 <style scoped lang="less">
 .InnerTable {
+	.column-control {
+		float: right;
+		&::after {
+			content: '';
+			clear: both;
+		}
+	}
 	.table {
 		width: 100%;
 		.row {
@@ -80,5 +134,12 @@ export default {
 			}
 		}
 	}
+}
+</style>
+
+<style lang="less">
+.column-choose-checkbox-group {
+	display: flex;
+	flex-flow: column;
 }
 </style>
