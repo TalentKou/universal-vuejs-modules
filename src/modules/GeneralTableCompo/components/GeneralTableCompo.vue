@@ -20,10 +20,25 @@ export default {
 	data() {
 		return {
 			operation: {
-				inputs: [{ placeholder: '请输入模板名称', value: '', name: 't0' }],
+				inputs: [
+					{
+						label: '模板名称:',
+						placeholder: '请输入模板名称',
+						value: '',
+						name: 't0',
+					},
+					{
+						label: '手机:',
+						placeholder: '请输入手机号',
+						value: '',
+						type: 'tel',
+						name: 't1',
+					},
+				],
 				selects: [
 					{
 						value: '',
+						label: '模板类型:',
 						placeholder: '请选择模板类型',
 						name: 's0',
 						options: [
@@ -34,6 +49,7 @@ export default {
 					},
 					{
 						value: '',
+						label: '状态:',
 						placeholder: '请选择状态',
 						name: 's1',
 						options: [
@@ -44,6 +60,7 @@ export default {
 					},
 					{
 						value: '',
+						label: '节点:',
 						placeholder: '请选择节点',
 						name: 's2',
 						options: [

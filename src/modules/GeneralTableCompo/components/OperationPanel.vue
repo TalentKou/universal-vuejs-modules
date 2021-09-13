@@ -2,24 +2,55 @@
 	<div class="OperationPanel">
 		<el-row type="flex" :gutter="6" class="first-row">
 			<el-col v-for="inputItem in operation.inputs" :key="inputItem.name">
-				<el-input
-					:placeholder="inputItem.placeholder"
-					v-model="inputItem.value"
-				></el-input>
+				<el-form inline>
+					<el-form-item :label="inputItem.label">
+						<el-input
+							v-if="inputItem.type == 'tel'"
+							:maxlength="inputItem.maxlength || 11"
+							:placeholder="inputItem.placeholder"
+							:value="inputItem.value"
+							@input="
+								(value) => {
+									if (!value.match(/[^\d]/)) {
+										inputItem.value = value;
+									}
+								}
+							"
+							@change="telephoneChangeHandle"
+						></el-input>
+						<el-input
+							v-else
+							:placeholder="inputItem.placeholder"
+							v-model="inputItem.value"
+						></el-input>
+						<el-alert
+							v-if="inputItem.type == 'tel'"
+							v-show="!telephoneIsValid"
+							title="格式不正确"
+							type="error"
+							:closable="false"
+						>
+						</el-alert>
+					</el-form-item>
+				</el-form>
 			</el-col>
 			<el-col v-for="selectItem in operation.selects" :key="selectItem.name">
-				<el-select
-					v-model="selectItem.value"
-					:placeholder="selectItem.placeholder"
-				>
-					<el-option
-						v-for="option in selectItem.options"
-						:key="option.name"
-						:label="option.label"
-						:value="option.value"
-					>
-					</el-option>
-				</el-select>
+				<el-form inline>
+					<el-form-item :label="selectItem.label">
+						<el-select
+							v-model="selectItem.value"
+							:placeholder="selectItem.placeholder"
+						>
+							<el-option
+								v-for="option in selectItem.options"
+								:key="option.name"
+								:label="option.label"
+								:value="option.value"
+							>
+							</el-option>
+						</el-select>
+					</el-form-item>
+				</el-form>
 			</el-col>
 			<el-col v-for="buttonItem in operation.buttons" :key="buttonItem.name">
 				<el-button
@@ -36,6 +67,19 @@
 export default {
 	name: 'OperationPanel',
 	props: ['operation'],
+	data() {
+		return {
+			telephoneIsValid: true,
+		};
+	},
+	methods: {
+		telephoneChangeHandle(tel) {
+			this.telephoneIsValid =
+				/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(
+					tel
+				);
+		},
+	},
 };
 </script>
 
