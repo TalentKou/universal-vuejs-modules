@@ -34,9 +34,9 @@
 				>
 					<el-switch
 						v-if="prop.type == 'switch'"
-						v-model="row[prop.field]"
-						active-text="有效"
-						inactive-text="禁用"
+						:value="row[prop.field]"
+						:active-text="prop.activeText"
+						:inactive-text="prop.inactiveText"
 					>
 					</el-switch>
 					<div v-else-if="prop.type == 'operates'">
@@ -74,8 +74,12 @@ export default {
 			return cProps;
 		},
 	},
-	mounted() {
-		this.checkAllChanged(true);
+	watch: {
+		'tableData.props': function (newValue) {
+			if (Array.isArray(newValue) && newValue.length > 0) {
+				this.checkAllChanged(true);
+			}
+		},
 	},
 	methods: {
 		checkAllChanged(status) {

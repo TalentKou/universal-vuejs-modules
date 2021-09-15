@@ -1,7 +1,7 @@
 <template>
 	<div class="OperationPanel">
 		<el-row type="flex" :gutter="6" class="first-row">
-			<el-col v-for="inputItem in operation.inputs" :key="inputItem.name">
+			<el-col v-for="inputItem in operation.inputs" :key="inputItem.id">
 				<el-form inline>
 					<el-form-item :label="inputItem.label">
 						<el-input
@@ -34,7 +34,22 @@
 					</el-form-item>
 				</el-form>
 			</el-col>
-			<el-col v-for="selectItem in operation.selects" :key="selectItem.name">
+			<el-col
+				v-for="datePickerItem in operation.datePickers"
+				:key="datePickerItem.id"
+			>
+				<el-form inline>
+					<el-form-item :label="datePickerItem.label">
+						<el-date-picker
+							v-model="datePickerItem.value"
+							type="date"
+							:placeholder="datePickerItem.placeholder"
+						>
+						</el-date-picker>
+					</el-form-item>
+				</el-form>
+			</el-col>
+			<el-col v-for="selectItem in operation.selects" :key="selectItem.id">
 				<el-form inline>
 					<el-form-item :label="selectItem.label">
 						<el-select
@@ -43,7 +58,7 @@
 						>
 							<el-option
 								v-for="option in selectItem.options"
-								:key="option.name"
+								:key="option.id"
 								:label="option.label"
 								:value="option.value"
 							>
@@ -52,11 +67,11 @@
 					</el-form-item>
 				</el-form>
 			</el-col>
-			<el-col v-for="buttonItem in operation.buttons" :key="buttonItem.name">
+			<el-col v-for="buttonItem in operation.buttons" :key="buttonItem.id">
 				<el-button
 					:type="buttonItem.type"
 					@click="$emit('EventDispatch', buttonItem.event)"
-					>{{ buttonItem.name }}</el-button
+					>{{ buttonItem.label }}</el-button
 				>
 			</el-col>
 		</el-row>

@@ -3,11 +3,11 @@
 		<el-pagination
 			@size-change="handleSizeChange"
 			@current-change="handleCurrentChange"
-			:current-page="currentPage"
-			:page-sizes="[10, 20, 30, 40]"
-			:page-size="10"
+			:current-page="pageData.currentPage"
+			:page-sizes="[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+			:page-size="pageData.pageSize"
 			layout="total, sizes, prev, pager, next, jumper"
-			:total="400"
+			:total="pageData.total"
 		>
 		</el-pagination>
 	</div>
@@ -16,14 +16,14 @@
 <script>
 export default {
 	name: 'PaginationBar',
-	data() {
-		return {
-			currentPage: 1,
-		};
-	},
+	props: ['pageData'],
 	methods: {
-		handleSizeChange() {},
-		handleCurrentChange() {},
+		handleSizeChange(val) {
+			this.$emit('EventDispatch', 'pageSizeChanged', val);
+		},
+		handleCurrentChange(val) {
+			this.$emit('EventDispatch', 'currentPageChanged', val);
+		},
 	},
 };
 </script>
